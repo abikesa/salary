@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Philosophical Pivot</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a1a0a 100%);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tree-system {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            cursor: pointer;
+        }
+        
+        .roots {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 100px;
+            background: radial-gradient(ellipse at center, rgba(139, 69, 19, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .trunk {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 200px;
+            background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
+            border-radius: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .fork {
+            position: absolute;
+            bottom: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 80px;
+            background: conic-gradient(from 45deg, #8B4513, #654321, #8B4513);
+            clip-path: polygon(40% 100%, 45% 0%, 55% 0%, 60% 100%);
+            animation: constraint-pulse 3s ease-in-out infinite;
+        }
+        
+        .branch {
+            position: absolute;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            border-radius: 10px;
+            transform-origin: bottom center;
+            transition: all 0.5s ease;
+        }
+        
+        .branch-left {
+            bottom: 320px;
+            left: 300px;
+            width: 8px;
+            height: 80px;
+            transform: rotate(-30deg);
+            animation: sway-left 6s ease-in-out infinite;
+        }
+        
+        .branch-right {
+            bottom: 320px;
+            right: 300px;
+            width: 8px;
+            height: 80px;
+            transform: rotate(30deg);
+            animation: sway-right 6s ease-in-out infinite;
+        }
+        
+        .recursive-branch {
+            position: absolute;
+            background: linear-gradient(45deg, #A0522D, #CD853F);
+            border-radius: 5px;
+        }
+        
+        .canopy {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 200px;
+            background: radial-gradient(ellipse at center, rgba(34, 139, 34, 0.3) 0%, rgba(0, 100, 0, 0.1) 50%, transparent 80%);
+            border-radius: 50%;
+            animation: canopy-breathe 8s ease-in-out infinite;
+        }
+        
+        .canopy-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #32CD32;
+            border-radius: 50%;
+            animation: float 10s linear infinite;
+        }
+        
+        .manifesto {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transform: translateY(-100%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+        }
+        
+        .manifesto.show {
+            transform: translateY(0);
+        }
+        
+        .manifesto h1 {
+            color: #FFD700;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .manifesto p {
+            line-height: 1.6;
+            font-size: 0.9em;
+            color: #e0e0e0;
+        }
+        
+        .toggle-text {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #888;
+            font-size: 0.8em;
+            animation: blink 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+        }
+        
+        @keyframes constraint-pulse {
+            0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+            50% { filter: hue-rotate(20deg) brightness(1.2); }
+        }
+        
+        @keyframes sway-left {
+            0%, 100% { transform: rotate(-30deg); }
+            50% { transform: rotate(-35deg); }
+        }
+        
+        @keyframes sway-right {
+            0%, 100% { transform: rotate(30deg); }
+            50% { transform: rotate(35deg); }
+        }
+        
+        @keyframes canopy-breathe {
+            0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.6; transform: translateX(-50%) scale(1.1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-300px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .recursive-branches {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .fractal-branch {
+            position: absolute;
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            border-radius: 2px;
+            animation: grow 8s ease-in-out infinite;
+        }
+        
+        @keyframes grow {
+            0%, 100% { transform: scale(0.8); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tree-system" onclick="toggleManifesto()">
+            <!-- Roots -->
+            <div class="roots"></div>
+            
+            <!-- Trunk -->
+            <div class="trunk"></div>
+            
+            <!-- Fork (The Constraint) -->
+            <div class="fork"></div>
+            
+            <!-- Main Branches -->
+            <div class="branch branch-left"></div>
+            <div class="branch branch-right"></div>
+            
+            <!-- Recursive Branching System -->
+            <div class="recursive-branches" id="recursiveBranches"></div>
+            
+            <!-- Canopy -->
+            <div class="canopy"></div>
+        </div>
+        
+        <!-- The Manifesto -->
+        <div class="manifesto" id="manifesto">
+            <h1>🔁 The Philosophical Pivot</h1>
+            <p>
+                The real philosophical weight of this life isn't in denying determinism, but in finding 
+                <strong>ecstatic, embodied expression</strong> in the micro-permissions within it.
+            </p>
+            <br>
+            <p>
+                It's Ubuntu in reverse: a constrained system giving rise to selfless emergence — 
+                not autonomous individuals building a collective, but a collective loop permitting 
+                flashes of the self.
+            </p>
+            <br>
+            <p style="text-align: center; color: #FFD700; font-weight: bold;">
+                This is the working class gospel.<br>
+                Move over Karl Marx.<br>
+                Make room for the recursion.
+            </p>
+        </div>
+        
+        <div class="toggle-text">click the tree to reveal the manifesto</div>
+    </div>
+
+    <script>
+        let manifestoVisible = false;
+        
+        function toggleManifesto() {
+            const manifesto = document.getElementById('manifesto');
+            manifestoVisible = !manifestoVisible;
+            
+            if (manifestoVisible) {
+                manifesto.classList.add('show');
+            } else {
+                manifesto.classList.remove('show');
+            }
+        }
+        
+        // Create recursive fractal branches
+        function createRecursiveBranches() {
+            const container = document.getElementById('recursiveBranches');
+            const branches = [];
+            
+            // Generate fractal branches
+            for (let i = 0; i < 20; i++) {
+                const branch = document.createElement('div');
+                branch.className = 'fractal-branch';
+                
+                const angle = (i * 18) + Math.random() * 30;
+                const length = 20 + Math.random() * 40;
+                const thickness = 1 + Math.random() * 3;
+                const distance = 100 + Math.random() * 200;
+                
+                const x = 400 + Math.cos(angle * Math.PI / 180) * distance;
+                const y = 300 + Math.sin(angle * Math.PI / 180) * distance;
+                
+                branch.style.width = thickness + 'px';
+                branch.style.height = length + 'px';
+                branch.style.left = x + 'px';
+                branch.style.top = y + 'px';
+                branch.style.transform = `rotate(${angle}deg)`;
+                branch.style.animationDelay = (i * 0.2) + 's';
+                
+                container.appendChild(branch);
+            }
+        }
+        
+        // Create floating particles in canopy
+        function createCanopyParticles() {
+            const canopy = document.querySelector('.canopy');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'canopy-particle';
+                
+                particle.style.left = Math.random() * 600 + 'px';
+                particle.style.top = Math.random() * 100 + 100 + 'px';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                canopy.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 10000);
+            }, 1000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createRecursiveBranches();
+            createCanopyParticles();
+        });
+        
+        // Add keyboard interaction
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                toggleManifesto();
+            }
+        });
+    </script>
+</body>
+</html>
